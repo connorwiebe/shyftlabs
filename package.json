@@ -1,0 +1,32 @@
+{
+  "name": "shyftlabs",
+  "version": "1.0.0",
+  "main": "app.js",
+  "author": "Connor Wiebe",
+  "license": "UNLICENSED",
+  "scripts": {
+    "start": "concurrently --kill-others-on-fail \"yarn run server\" \"yarn run client\"",
+    "server": "NODE_ENV=local nodemon -i client --experimental-modules src/app.js",
+    "client": "cd client && yarn dev",
+    "migrate:up": "NODE_ENV=local knex --env local migrate:up",
+    "migrate:down": "NODE_ENV=local knex --env local migrate:down",
+    "migrate:latest": "NODE_ENV=local knex --env local migrate:latest",
+    "migrate:list": "NODE_ENV=local knex --env local migrate:list",
+    "migrate:new": "NODE_ENV=local knex --env local migrate:make",
+    "migrate:prod:latest": "knex --env production migrate:latest --connection $DB_CONNECTION",
+    "seed:new": "NODE_ENV=local knex --env local seed:make",
+    "seed:run": "NODE_ENV=local knex --env local seed:run"
+  },
+  "dependencies": {
+    "@faker-js/faker": "^8.4.1",
+    "axios": "^1.6.7",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "knex": "^2.5.1",
+    "pg": "^8.11.3",
+    "statuses": "^2.0.1"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.1"
+  }
+}
