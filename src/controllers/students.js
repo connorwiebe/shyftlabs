@@ -7,6 +7,13 @@ const getStudents = asyncHandler(async (req, res, next) => {
   return res.status(200).json(students)
 })
 
+const createStudent = asyncHandler(async (req, res, next) => {
+  const student = await studentsService.createStudent(req.body)
+
+  return res.status(200).json(student)
+})
+
 module.exports = {
-  getStudents
+  getStudents,
+  createStudent
 }
