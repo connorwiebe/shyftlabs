@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { Loader2 } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -16,6 +17,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { useToast } from '@/components/ui/use-toast'
+import { sleep } from '@/lib/utils'
 
 const addStudentFormSchema = z.object({
   name: z.string().min(2, {
@@ -32,6 +34,7 @@ type AddStudentForm = z.infer<typeof addStudentFormSchema>
 
 export const AddStudentForm = () => {
   const { toast } = useToast()
+  const queryClient = useQueryClient()
 
   const form = useForm<AddStudentForm>({
     resolver: zodResolver(addStudentFormSchema),
@@ -42,24 +45,32 @@ export const AddStudentForm = () => {
     },
   })
 
-  const { mutate: createStudent } = useMutation({
+  const { isPending, mutate: createStudent } = useMutation({
     mutationKey: ['login'],
     mutationFn: async (data: AddStudentForm) => {
+      await sleep(1000)
+
+      // generate uuid on client so optimistic updates can be added later
+      // https://tanstack.com/query/latest/docs/framework/react/guides/optimistic-updates
       const res = await client({
         url: `/api/students`,
         method: 'post',
-        data,
+        data: {
+          id: crypto.randomUUID(),
+          ...data,
+        },
       })
       return res.data
     },
     onSuccess: (data) => {
       toast({
-        title: 'Student added!',
-        description: (
-          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-          </pre>
-        ),
+        title: 'Success!',
+        description: `${data.name} was added to the student list.`,
+        duration: 5000,
+      })
+
+      return queryClient.invalidateQueries({
+        queryKey: ['students'],
       })
     },
   })
@@ -107,7 +118,11 @@ export const AddStudentForm = () => {
           }}
         />
 
-        <Button type="submit">Add student</Button>
+        <Button type="submit" disabled={isPending}>
+          <span className="flex items-center">
+            Add student {isPending && <Loader2 className="ml-2 h-4 w-4 animate-spin" />}
+          </span>
+        </Button>
       </form>
     </Form>
   )

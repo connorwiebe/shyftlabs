@@ -7,7 +7,6 @@ const getStudents = async () => {
 
 const createStudent = async (data) => {
   const student = await studentsModel.createStudent(data)
-  console.log(`student ->`, student)
   return student
 }
 
