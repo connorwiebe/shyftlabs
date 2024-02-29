@@ -1,10 +1,21 @@
 import { useQuery } from '@tanstack/react-query'
 
+import { client } from '@/api'
+
+import { Student } from '../types'
+import { columns } from './Columns'
+import { DataTable } from './DataTable'
+
 export const StudentsList = () => {
-  const { isLoading, data: students = [] } = useQuery({
+  const { isLoading, data: students = [] } = useQuery<Student[]>({
     queryKey: ['students'],
-    queryFn: () => {
-      return ['a', 'b', 'c']
+    queryFn: async () => {
+      const res = await client({
+        url: `/api/students`,
+        method: 'get',
+      })
+
+      return res.data
     },
   })
 
@@ -13,10 +24,8 @@ export const StudentsList = () => {
   }
 
   return (
-    <div className="w-full max-w-5xl border-2 border-green-500">
-      {students.map((student) => {
-        return <span key={student}>{JSON.stringify(student, null, 2)}</span>
-      })}
+    <div className="mx-auto py-10">
+      <DataTable columns={columns} data={students} />
     </div>
   )
 }

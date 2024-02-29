@@ -1,20 +1,33 @@
 import { Outlet } from 'react-router-dom'
 
 import { Sidebar } from '@/components/layout'
+import { Separator } from '@/components/ui/separator'
+
+const sidebarItems = [
+  {
+    title: 'Home',
+    href: '/',
+  },
+  {
+    title: 'Students',
+    href: '/students',
+  },
+]
 
 export const MainLayout = () => {
   return (
-    <div className="hidden md:block">
-      <div className="border-t">
-        <div className="bg-background">
-          <div className="grid lg:grid-cols-5">
-            <Sidebar className="hidden lg:block" />
-            <div className="col-span-3 lg:col-span-4 lg:border-l">
-              <div className="h-full px-4 py-6 lg:px-8">
-                <Outlet />
-              </div>
-            </div>
-          </div>
+    <div className="space-y-6 p-10 pb-16 md:block">
+      <div className="space-y-0.5">
+        <h2 className="text-2xl font-bold tracking-tight">Shyftlabs</h2>
+        <p className="text-muted-foreground">Take-home assessment</p>
+      </div>
+      <Separator className="my-6" />
+      <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
+        <aside className="-mx-4 lg:w-1/5">
+          <Sidebar items={sidebarItems} />
+        </aside>
+        <div className="flex-1 lg:max-w-4xl">
+          <Outlet />
         </div>
       </div>
     </div>

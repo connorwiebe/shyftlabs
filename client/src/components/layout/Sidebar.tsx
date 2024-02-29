@@ -1,27 +1,41 @@
-import { Link } from 'react-router-dom'
+'use client'
 
-import { Button } from '@/components/ui/button'
+import { Link, useLocation } from 'react-router-dom'
+
+import { Button, buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
-export const Sidebar = ({ className }: React.HTMLAttributes<HTMLDivElement>) => {
+interface SidebarProps extends React.HTMLAttributes<HTMLElement> {
+  items: {
+    href: string
+    title: string
+  }[]
+}
+
+export const Sidebar = ({ className, items, ...props }: SidebarProps) => {
+  const location = useLocation()
+
   return (
-    <div className={cn('pb-12', className)}>
-      <div className="space-y-4 py-4">
-        <div className="px-3 py-2">
-          <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">Shyftlabs</h2>
-          <div className="space-y-1">
-            <Button asChild variant="secondary" className="w-full justify-start">
-              <Link to="/">Home</Link>
-            </Button>
-            <Button asChild variant="ghost" className="w-full justify-start">
-              <Link to="/login">Login</Link>
-            </Button>
-            <Button asChild variant="ghost" className="w-full justify-start">
-              <Link to="/students">Student List</Link>
-            </Button>
-          </div>
-        </div>
-      </div>
-    </div>
+    <nav
+      className={cn('flex space-x-2 lg:flex-col lg:space-x-0 lg:space-y-1', className)}
+      {...props}>
+      {items.map((item) => {
+        return (
+          <Button
+            key={item.href}
+            asChild
+            variant="secondary"
+            className={cn(
+              buttonVariants({ variant: 'ghost' }),
+              location.pathname === item.href
+                ? 'hover:bg-muted'
+                : 'bg-transparent hover:bg-transparent hover:underline',
+              'justify-start',
+            )}>
+            <Link to={item.href}>{item.title}</Link>
+          </Button>
+        )
+      })}
+    </nav>
   )
 }

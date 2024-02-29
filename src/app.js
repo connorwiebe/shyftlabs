@@ -3,7 +3,7 @@ require('dotenv').config()
 const express = require('express')
 const statuses = require('statuses')
 
-const dataRoute = require('./routes/data')
+const studentsRoutes = require('./routes/students')
 
 const app = express()
 
@@ -11,7 +11,12 @@ app.use(express.json())
 
 app.listen(2222)
 
-app.use('/data', dataRoute)
+app.use((req, res, next) => {
+  console.log(`${req.method}: ${req.url}`)
+  next()
+})
+
+app.use('/api/students', studentsRoutes)
 
 app.use((err, req, res, next) => {
   /* eslint-disable no-console */
