@@ -2,12 +2,12 @@ import './index.css'
 
 import { QueryClientProvider } from '@tanstack/react-query'
 import ReactDOM from 'react-dom/client'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom'
 
 import { ErrorElement, MainLayout } from '@/components/layout'
 import { queryClient } from '@/lib/react-query'
 
-import { Routes } from './routes'
+import { StudentRoutes } from './features/students'
 
 const router = createBrowserRouter([
   {
@@ -15,10 +15,9 @@ const router = createBrowserRouter([
     element: <MainLayout />,
     errorElement: <ErrorElement />,
     children: [
-      {
-        path: '/*',
-        element: <Routes />,
-      },
+      { path: '/students/*', children: StudentRoutes },
+      { path: '/', element: <Navigate to="/students" /> },
+      { path: '*', element: <Navigate to="." /> },
     ],
   },
 ])

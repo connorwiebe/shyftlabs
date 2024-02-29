@@ -24,7 +24,13 @@ export const StudentsList = () => {
   }
 
   return (
-    <div className="mx-auto py-10">
+    <div className="space-y-6 py-3 lg:max-w-4xl">
+      <div>
+        <h3 className="text-lg font-medium">Students</h3>
+        <p className="text-sm text-muted-foreground">
+          This is a list of all of the students in the database.
+        </p>
+      </div>
       <DataTable columns={columns} data={students} />
     </div>
   )

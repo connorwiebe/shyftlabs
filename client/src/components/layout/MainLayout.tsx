@@ -12,6 +12,10 @@ const sidebarItems = [
     title: 'Students',
     href: '/students',
   },
+  {
+    title: 'Add Student',
+    href: '/students/add',
+  },
 ]
 
 export const MainLayout = () => {
