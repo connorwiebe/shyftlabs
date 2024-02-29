@@ -5,7 +5,7 @@ const { faker } = require('@faker-js/faker')
  * @returns { Promise<void> }
  */
 exports.seed = async function (knex) {
-  const fakeStudentsData = Array.from({ length: 10 }, (v, i) => {
+  const fakeStudentsData = Array.from({ length: 5 }, (v, i) => {
     return {
       id: faker.string.uuid(),
       name: faker.person.fullName(),
